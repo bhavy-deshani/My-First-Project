@@ -2,8 +2,10 @@ import React, { useRef, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 // import "../LoginRegister.css"
 import styled from 'styled-components'
+import CustomHook from "./hooks/CustomHook"
 
 const LoginRegisterPage = () => {
+  const {handleChange,inp,errors} = CustomHook()
     const [rightPanel, setRightPanel] = useState(false)
     const [state, setState] = useState({formData:""})
     const SetRightPanel = () => {
@@ -21,17 +23,19 @@ const LoginRegisterPage = () => {
     // }
 
     let bhavy = (event)=> {
-      event.preventDefault()
       console.log("called");
+      event.preventDefault()
     }
     let login =()=>{
       console.log("called login",state);
+      console.log("sumnit");
     }
     let setlogin = (event) =>{
       console.log("called form data for login",state);
       // (event)=>{}
       setState((harsh)=> ({formData: { ...harsh.formData, [event.target.name]: event.target.value}}) )
     }
+    console.log(inp);
     return (
         <>
             <Wrapper>
@@ -48,10 +52,10 @@ const LoginRegisterPage = () => {
                             </div>
                             <span>use email for registration</span>
                             {/* input fields start */}
-                            <input type="text" onChange={setlogin} placeholder="User Name" />
-                            <input type="email" onChange={setlogin} placeholder="Email" />
-                            <input type="password" onChange={setlogin} placeholder="Password" />
-                            <button onClick={bhavy}>Create Account</button>
+                            <input type="text" onChange={handleChange} placeholder="User Name" />
+                            <input type="email" onChange={handleChange} placeholder="Email" />
+                            <input type="password" onChange={handleChange} placeholder="Password" />
+                            <button onClick={login}>Create Account</button>
                             {/* input fields end */}
                         </form>
                     </div>
@@ -70,7 +74,7 @@ const LoginRegisterPage = () => {
                             <input type="email" onChange={setlogin} placeholder="Email" />
                             <input type="password" onChange={setlogin} placeholder="Password" />
                             <span>Forgot your <span className="forgot">password?</span></span>
-                            <button onClick={bhavy}>Login</button>
+                            <button onClick={login}>Login</button>
                             {/* input fields end */}
                         </form>
                     </div>
