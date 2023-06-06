@@ -3,103 +3,112 @@ import { NavLink } from 'react-router-dom'
 // import "../LoginRegister.css"
 import styled from 'styled-components'
 import CustomHook from "./hooks/CustomHook"
+import axios from 'axios'
 
 const LoginRegisterPage = () => {
-  const {handleChange,inp,errors} = CustomHook()
-    const [rightPanel, setRightPanel] = useState(false)
-    const [state, setState] = useState({formData:""})
-    const SetRightPanel = () => {
-        setRightPanel(true)
-    }
-    const SetLeftPanel = () => {
-        setRightPanel(false)
-    }
-    // const panelRef = useRef()
-    // const SetRightPanel = () => {
-    //     panelRef.current.className = "container right-panel-active"
-    // }
-    // const SetLeftPanel = () => {
+  const { handleChange, inp, errors } = CustomHook()
+  const [rightPanel, setRightPanel] = useState(false)
+  const [state, setState] = useState({ formData: "" })
+  const SetRightPanel = () => {
+    setRightPanel(true)
+  }
+  const SetLeftPanel = () => {
+    setRightPanel(false)
+  }
+  // const panelRef = useRef()
+  // const SetRightPanel = () => {
+  //     panelRef.current.className = "container right-panel-active"
+  // }
+  // const SetLeftPanel = () => {
     //     panelRef.current.className = "container"
     // }
+    axios.post('http://localhost:5000/posts', inp)
+      .then(function (response) {
+        console.log("response", response);
+      })
+      .catch(function (error) {
+        console.log("data", error);
+      });
 
-    let bhavy = (event)=> {
-      console.log("called");
-      event.preventDefault()
-    }
-    let login =()=>{
-      console.log("called login",state);
-      console.log("sumnit");
-    }
-    let setlogin = (event) =>{
-      console.log("called form data for login",state);
-      // (event)=>{}
-      setState((harsh)=> ({formData: { ...harsh.formData, [event.target.name]: event.target.value}}) )
-    }
-    console.log(inp);
-    return (
-        <>
-            <Wrapper>
-                <div className={`container ${rightPanel ? "right-panel-active" : ""}`} id="container">
-                {/* <div className="container" id="container" ref={panelRef}> */}
-                    {/* sign Up form section start*/}
-                    <div className="form sign_up">
-                        <form action="#">
-                            {/* heading */}
-                            <h1>Create An Account</h1>
-                            {/* social media icons */}
-                            <div className="social-container">
-                                <NavLink to=""><i className="fa-brands fa-google" /></NavLink>
-                            </div>
-                            <span>use email for registration</span>
-                            {/* input fields start */}
-                            <input type="text" onChange={handleChange} placeholder="User Name" />
-                            <input type="email" onChange={handleChange} placeholder="Email" />
-                            <input type="password" onChange={handleChange} placeholder="Password" />
-                            <button onClick={login}>Create Account</button>
-                            {/* input fields end */}
-                        </form>
-                    </div>
-                    {/* sign Up form section end*/}
-                    {/* sign in form section start*/}
-                    <div className="form sign_in" onSubmit={bhavy}>
-                        <form action="#">
-                            {/* heading */}
-                            <h1>Login In</h1>
-                            {/* social media icons */}
-                            <div className="social-container">
-                                <NavLink to=""><i className="fa-brands fa-google" /></NavLink>
-                            </div>
-                            <span>Login In with your Account</span>
-                            {/* input fields start */}
-                            <input type="email" onChange={setlogin} placeholder="Email" />
-                            <input type="password" onChange={setlogin} placeholder="Password" />
-                            <span>Forgot your <span className="forgot">password?</span></span>
-                            <button onClick={login}>Login</button>
-                            {/* input fields end */}
-                        </form>
-                    </div>
-                    {/* sign in form section end*/}
-                    {/* overlay section start*/}
-                    <div className="overlay-container">
-                        <div className="overlay">
-                            <div className="overlay-pannel overlay-left">
-                                <h1>Already have an account</h1>
-                                <p>Please Login</p>
-                                <button id="signIn" className="overBtn" onClick={SetLeftPanel} >SignIn</button>
-                            </div>
-                            <div className="overlay-pannel overlay-right">
-                                <h1>Create Account</h1>
-                                <p>Start Your Journey with Us</p>
-                                <button id="signUp" className="overBtn" onClick={SetRightPanel}>Sign Up</button>
-                            </div>
-                        </div>
-                    </div>
-                    {/* overlay section start*/}
-                </div>
+  let bhavy = (event) => {
+    // console.log("called");
+    event.preventDefault()
+  }
+  let login = (event) => {
+    event.preventDefault()
+    // console.log("called login",state);
+    console.log(state);
+  }
+  let setlogin = (event) => {
+    // console.log("called form data for login",state);
+    // (event)=>{}
+    setState((harsh) => ({ formData: { ...harsh.formData, [event.target.name]: event.target.value } }))
+  }
+  // console.log(inp);
+  return (
+    <>
+      <Wrapper>
+        <div className={`container ${rightPanel ? "right-panel-active" : ""}`} id="container">
+          {/* <div className="container" id="container" ref={panelRef}> */}
+          {/* sign Up form section start*/}
+          <div className="form sign_up">
+            <form action="#">
+              {/* heading */}
+              <h1>Create An Account</h1>
+              {/* social media icons */}
+              <div className="social-container">
+                <NavLink to=""><i className="fa-brands fa-google" /></NavLink>
+              </div>
+              <span>use email for registration</span>
+              {/* input fields start */}
+              <input type="text" onChange={handleChange} placeholder="User Name" />
+              <input type="email" onChange={handleChange} placeholder="Email" />
+              <input type="password" onChange={handleChange} placeholder="Password" />
+              <button onClick={login}>Create Account</button>
+              {/* input fields end */}
+            </form>
+          </div>
+          {/* sign Up form section end*/}
+          {/* sign in form section start*/}
+          <div className="form sign_in" onSubmit={bhavy}>
+            <form action="#">
+              {/* heading */}
+              <h1>Login In</h1>
+              {/* social media icons */}
+              <div className="social-container">
+                <NavLink to=""><i className="fa-brands fa-google" /></NavLink>
+              </div>
+              <span>Login In with your Account</span>
+              {/* input fields start */}
+              <input type="email" onChange={setlogin} placeholder="Email" />
+              <input type="password" onChange={setlogin} placeholder="Password" />
+              <span>Forgot your <span className="forgot">password?</span></span>
+              <button onClick={login}>Login</button>
+              {/* input fields end */}
+            </form>
+          </div>
+          {/* sign in form section end*/}
+          {/* overlay section start*/}
+          <div className="overlay-container">
+            <div className="overlay">
+              <div className="overlay-pannel overlay-left">
+                <h1>Already have an account</h1>
+                <p>Please Login</p>
+                <button id="signIn" className="overBtn" onClick={SetLeftPanel} >SignIn</button>
+              </div>
+              <div className="overlay-pannel overlay-right">
+                <h1>Create Account</h1>
+                <p>Start Your Journey with Us</p>
+                <button id="signUp" className="overBtn" onClick={SetRightPanel}>Sign Up</button>
+              </div>
+            </div>
+          </div>
+          {/* overlay section start*/}
+        </div>
 
-            </Wrapper>
-        </>
-    )
+      </Wrapper>
+    </>
+  )
 }
 
 const Wrapper = styled.div`
