@@ -1,13 +1,16 @@
 import React, { useRef, useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 // import "../LoginRegister.css"
 import styled from 'styled-components'
 import CustomHook from "./hooks/CustomHook"
 import axios from 'axios'
+import { useCookies } from 'react-cookie'
 
 const LoginRegisterPage = () => {
-  const { handleChange, inp, errors } = CustomHook()
+  const { handleChange, inp, errors } = CustomHook({ "role": 2 }, {})
   const [rightPanel, setRightPanel] = useState(false)
+  const navigate = useNavigate();
+  const [cookies, setCookie] = useCookies([]);
   const [state, setState] = useState({ formData: "" })
   const SetRightPanel = () => {
     setRightPanel(true)
@@ -20,29 +23,52 @@ const LoginRegisterPage = () => {
   //     panelRef.current.className = "container right-panel-active"
   // }
   // const SetLeftPanel = () => {
-    //     panelRef.current.className = "container"
-    // }
-    axios.post('http://localhost:5000/posts', inp)
-      .then(function (response) {
-        console.log("response", response);
-      })
-      .catch(function (error) {
-        console.log("data", error);
-      });
+  //     panelRef.current.className = "container"
+  // }
+  let saveformdata = () => {
 
-  let bhavy = (event) => {
-    // console.log("called");
-    event.preventDefault()
+    // axios.post('http://localhost:5000/user', inp)
+    //   .then(function (response) {
+    //     console.log("response", response);
+    //   })
+    //   .catch(function (error) {
+    //     console.log("data", error);
+    //   });
+    fetch("http://localhost:5000/users", {
+      method: "POST", // *GET, POST, PUT, DELETE, etc.
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(inp)
+    }).then((res) => res.json()).then((result) => {
+      // console.log(result);
+      navigate("/login")
+    })
   }
-  let login = (event) => {
-    event.preventDefault()
-    // console.log("called login",state);
+  let login = () => {
+    axios.get(`http://localhost:5000/users?email=${state.formData.email}&password=${state.formData.password}`)
+      .then(function (response) {
+        if (response.data.length > 0) {
+          setCookie("userid", response.data[0].id)
+          setCookie("username", response.data[0].username)
+          if (response.data[0].role == 1) {
+            navigate("/admin")
+          } else {
+            navigate("/")
+
+          }
+        } else {
+
+          console.log("invalid user");
+        }
+      })
     console.log(state);
   }
   let setlogin = (event) => {
     // console.log("called form data for login",state);
     // (event)=>{}
     setState((harsh) => ({ formData: { ...harsh.formData, [event.target.name]: event.target.value } }))
+  }
+  const addclass = () => {
+    document.body.classList.add("active")
   }
   // console.log(inp);
   return (
@@ -52,7 +78,7 @@ const LoginRegisterPage = () => {
           {/* <div className="container" id="container" ref={panelRef}> */}
           {/* sign Up form section start*/}
           <div className="form sign_up">
-            <form action="#">
+            <form method='post' >
               {/* heading */}
               <h1>Create An Account</h1>
               {/* social media icons */}
@@ -61,16 +87,19 @@ const LoginRegisterPage = () => {
               </div>
               <span>use email for registration</span>
               {/* input fields start */}
-              <input type="text" onChange={handleChange} placeholder="User Name" />
-              <input type="email" onChange={handleChange} placeholder="Email" />
-              <input type="password" onChange={handleChange} placeholder="Password" />
-              <button onClick={login}>Create Account</button>
+              <input type="text" name='username' onChange={handleChange} placeholder="User Name" />
+              {errors.usernameError ? <span>This field is Required</span> : <></>}
+              <input type="email" name='email' onChange={handleChange} placeholder="Email" />
+              {errors.emailError ? <span>This field is Required</span> : <></>}
+              <input type="password" name='password' onChange={handleChange} placeholder="Password" />
+              {errors.passwordError ? <span>This field is Required</span> : <></>}
+              <button onClick={saveformdata} >Create Account</button>
               {/* input fields end */}
             </form>
           </div>
           {/* sign Up form section end*/}
           {/* sign in form section start*/}
-          <div className="form sign_in" onSubmit={bhavy}>
+          <div className="form sign_in" onSubmit={login}>
             <form action="#">
               {/* heading */}
               <h1>Login In</h1>

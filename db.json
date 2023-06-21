@@ -6,28 +6,16 @@
       "author": "typicode"
     },
     {
-      "": "aj;fh;dsjf",
+      "": "/lshfsdaj",
       "id": 2
     },
     {
-      "": "aj;fh;dsjf",
+      "": "bhavap@gmail.com",
       "id": 3
     },
     {
-      "": "aj;fh;dsjf",
+      "": "bhavap@gmail.com",
       "id": 4
-    },
-    {
-      "": "aj;fh;dsjf",
-      "id": 5
-    },
-    {
-      "": "aj;fh;dsjf",
-      "id": 6
-    },
-    {
-      "": "aj;fh;dsjf",
-      "id": 7
     }
   ],
   "comments": [
@@ -39,5 +27,30 @@
   ],
   "profile": {
     "name": "typicode"
-  }
+  },
+  "user": [
+    {
+      "role": 1,
+      "username": "admin",
+      "email": "admin@mail.com",
+      "password": "admin@123",
+      "id": 1
+    },
+    {
+      "": "hkla",
+      "id": 2
+    },
+    {
+      "": "hkla",
+      "user name": "bhaay",
+      "password": "123456",
+      "id": 3
+    },
+    {
+      "username": "bhavya",
+      "email": "jkfgdsk@hash.com",
+      "password": "12345567",
+      "id": 4
+    }
+  ]
 }
