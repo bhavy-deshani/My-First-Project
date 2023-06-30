@@ -1,10 +1,13 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
+// import CustomHook from './../page/hooks/CustomHook';
 
 const AdminMenu = () => {
     const [aside, setasie] = useState(false)
     const [cookies, setCookie, removeCookie] = useCookies();
+    // const [handleChange, inp, errors] = CustomHook()
     const navigate = useNavigate()
 
 
@@ -12,15 +15,17 @@ const AdminMenu = () => {
         setasie(!aside)
     }
     const handlelogin = () => {
+
         // axios.get(`http://localhost:5000/userdata?email=${inp.email}&password=${inp.password}`)
         //     .then((response) => {
-        // setCookie('username', null);
-        // setCookie('userid', null);
-        removeCookie("username");
-        removeCookie("userid");
-        navigate("/logout")
+        //         console.log(response);
+                // setCookie('username', null);
+                // setCookie('userid', null);
+                removeCookie("username");
+                removeCookie("userid");
+                navigate("/logout")
 
-        // });
+            // });
     }
 
 
@@ -63,9 +68,9 @@ const AdminMenu = () => {
                     </div>
                 </header>
                 <section className='px-2 pt-3'>
-                    <Outlet></Outlet>
                 </section>
             </main>
+            <Outlet></Outlet>
 
 
         </>

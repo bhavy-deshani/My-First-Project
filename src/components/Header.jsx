@@ -16,17 +16,22 @@ import {
   MDBCollapse,
 
 } from 'mdb-react-ui-kit';
-import { NavLink } from 'react-router-dom';
+import { NavLink,useNavigate } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 
 const Header = () => {
 
   const [showBasic, setShowBasic] = useState(false);
+  // const [Cookies,setCookies] = useCookies()
+  const [Cookies, setCookie, removeCookie] = useCookies([]);
+  const navigate = useNavigate()
+
 
   const MenuItem = {
     "/": "Home",
     "/about": "About",
     "/contact": "Contact",
-    "/login": "Login/Register"
+    // "/login": "Login/Register"
   }
 
   const Dropdown = [
@@ -44,6 +49,13 @@ const Header = () => {
     },
   ]
 
+  const Logout = () => {
+    console.log("remove cookies")
+    Object.keys(Cookies).forEach(cookieName => {
+        removeCookie(cookieName);
+    });
+    navigate("/login")
+}
   const Menudata = Object.entries(MenuItem).map(([key, value], i) => {
     console.log(key, value);
     return (<MDBNavbarItem key={i}>
@@ -93,11 +105,12 @@ const Header = () => {
                 </MDBNavbarLink>
               </MDBNavbarItem>
             </MDBNavbarNav>
+    {/* {JSON.stringify(Cookies)} */}
+            {Cookies.role ?
+              <MDBBtn color='danger' className='d-flex align-items-center' onClick={Logout}><i className="fa-solid fa-right-from-bracket"></i> Logout</MDBBtn> :
+              <MDBBtn color='success'><NavLink className='nav-link text-white d-flex align-items-center p-0' to="/login">Login <i className="fa-solid fa-right-to-bracket"></i></NavLink> </MDBBtn>
+            }
 
-            <form className='d-flex input-group w-auto'>
-              <input type='search' className='form-control' placeholder='Type query' aria-label='Search' />
-              <MDBBtn color='primary'>Search</MDBBtn>
-            </form>
           </MDBCollapse>
         </MDBContainer>
       </MDBNavbar>

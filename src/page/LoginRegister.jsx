@@ -1,140 +1,168 @@
-import React, { useRef, useState } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
-// import "../LoginRegister.css"
+import React, { useEffect, useRef, useState } from 'react'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
+import CustomHook from "./hooks/CustomHook" 
 import styled from 'styled-components'
-import CustomHook from "./hooks/CustomHook"
 import axios from 'axios'
 import { useCookies } from 'react-cookie'
 
 const LoginRegisterPage = () => {
-  const { handleChange, inp, errors } = CustomHook({ "role": 2 }, {})
   const [rightPanel, setRightPanel] = useState(false)
-  const navigate = useNavigate();
-  const [cookies, setCookie] = useCookies([]);
+  const { handleChange, inp, errors } = CustomHook({ "role": 2 }, {})
+  const navigate = useNavigate()
+  const [cookies, setCookies] = useCookies()
+  const [loginMsg, setLoginMsg] = useState("")
+  const [ErrorMsg, setErrorMsg] = useState(false)
   const [state, setState] = useState({ formData: "" })
+
+  // useEffect(() => {
+  //   if (cookies.role == 1) {
+  //     navigate("/admin")
+  //   }
+  //   if (cookies.role == 2) {
+  //     navigate("/")
+  //   }
+  // }, [cookies.role, navigate])
+
+  const LoginSubmit = async (event) => {
+    event.preventDefault()
+    console.log(inp)
+    try {
+      await axios.get(`http://localhost:5000/users?email=${inp.email}&password=${inp.password}`)
+        .then(function (response) {
+          console.log("res = ", response);
+          if (response.status == 200) {
+            console.log("response status", response.status)
+            if (response.data.length > 0) {
+                setCookies('username', response.data[0].username);
+                setCookies('userid', response.data[0].id);
+                setCookies('role', response.data[0].role);
+              if (response.data[0].role == 1) { 
+                navigate("/admin")
+              } else {
+                navigate("/")
+              }
+            } else {
+              console.log("invalid user");
+              setLoginMsg("invalid user")
+            }
+          } else {
+            console.log("error while connecting to the server", response.status);
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+          setErrorMsg(true)
+        });
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
+  const RegisterSubmit = (event) => {
+    event.preventDefault()
+    console.log(inp)
+
+    // fetch(`http://localhost:5000/users`, {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify(inp),
+    // })
+    //   .then(response => response.json())
+    //   .then(json =>
+    //     // console.log(json)
+    //     // navigate("/login")
+    //     setRightPanel(false)
+    //   );
+
+
+    axios.post('http://localhost:5000/users', inp)
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+  }
   const SetRightPanel = () => {
     setRightPanel(true)
   }
   const SetLeftPanel = () => {
     setRightPanel(false)
   }
-  // const panelRef = useRef()
-  // const SetRightPanel = () => {
-  //     panelRef.current.className = "container right-panel-active"
-  // }
-  // const SetLeftPanel = () => {
-  //     panelRef.current.className = "container"
-  // }
-  let saveformdata = () => {
 
-    // axios.post('http://localhost:5000/user', inp)
-    //   .then(function (response) {
-    //     console.log("response", response);
-    //   })
-    //   .catch(function (error) {
-    //     console.log("data", error);
-    //   });
-    fetch("http://localhost:5000/users", {
-      method: "POST", // *GET, POST, PUT, DELETE, etc.
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(inp)
-    }).then((res) => res.json()).then((result) => {
-      // console.log(result);
-      navigate("/login")
-    })
-  }
-  let login = () => {
-    axios.get(`http://localhost:5000/users?email=${state.formData.email}&password=${state.formData.password}`)
-      .then(function (response) {
-        if (response.data.length > 0) {
-          setCookie("userid", response.data[0].id)
-          setCookie("username", response.data[0].username)
-          if (response.data[0].role == 1) {
-            navigate("/admin")
-          } else {
-            navigate("/")
-
-          }
-        } else {
-
-          console.log("invalid user");
-        }
-      })
-    console.log(state);
-  }
-  let setlogin = (event) => {
-    // console.log("called form data for login",state);
-    // (event)=>{}
-    setState((harsh) => ({ formData: { ...harsh.formData, [event.target.name]: event.target.value } }))
-  }
-  const addclass = () => {
-    document.body.classList.add("active")
-  }
-  // console.log(inp);
   return (
     <>
       <Wrapper>
-        <div className={`container ${rightPanel ? "right-panel-active" : ""}`} id="container">
-          {/* <div className="container" id="container" ref={panelRef}> */}
-          {/* sign Up form section start*/}
-          <div className="form sign_up">
-            <form method='post' >
-              {/* heading */}
-              <h1>Create An Account</h1>
-              {/* social media icons */}
-              <div className="social-container">
-                <NavLink to=""><i className="fa-brands fa-google" /></NavLink>
-              </div>
-              <span>use email for registration</span>
-              {/* input fields start */}
-              <input type="text" name='username' onChange={handleChange} placeholder="User Name" />
-              {errors.usernameError ? <span>This field is Required</span> : <></>}
-              <input type="email" name='email' onChange={handleChange} placeholder="Email" />
-              {errors.emailError ? <span>This field is Required</span> : <></>}
-              <input type="password" name='password' onChange={handleChange} placeholder="Password" />
-              {errors.passwordError ? <span>This field is Required</span> : <></>}
-              <button onClick={saveformdata} >Create Account</button>
-              {/* input fields end */}
-            </form>
-          </div>
-          {/* sign Up form section end*/}
-          {/* sign in form section start*/}
-          <div className="form sign_in" onSubmit={login}>
-            <form action="#">
-              {/* heading */}
-              <h1>Login In</h1>
-              {/* social media icons */}
-              <div className="social-container">
-                <NavLink to=""><i className="fa-brands fa-google" /></NavLink>
-              </div>
-              <span>Login In with your Account</span>
-              {/* input fields start */}
-              <input type="email" onChange={setlogin} placeholder="Email" />
-              <input type="password" onChange={setlogin} placeholder="Password" />
-              <span>Forgot your <span className="forgot">password?</span></span>
-              <button onClick={login}>Login</button>
-              {/* input fields end */}
-            </form>
-          </div>
-          {/* sign in form section end*/}
-          {/* overlay section start*/}
-          <div className="overlay-container">
-            <div className="overlay">
-              <div className="overlay-pannel overlay-left">
-                <h1>Already have an account</h1>
-                <p>Please Login</p>
-                <button id="signIn" className="overBtn" onClick={SetLeftPanel} >SignIn</button>
-              </div>
-              <div className="overlay-pannel overlay-right">
-                <h1>Create Account</h1>
-                <p>Start Your Journey with Us</p>
-                <button id="signUp" className="overBtn" onClick={SetRightPanel}>Sign Up</button>
+        {ErrorMsg ?
+          <>Error while connecting please try after some time</>
+          :
+          <div className={`container ${rightPanel ? "right-panel-active" : ""}`} id="container">
+            <Link className='' style={{ position: 'relative', zIndex: '1000' }} to="/">
+              <i className='fa fa-home '></i>
+              home
+            </Link>
+            {/* sign Up form section start*/}
+            <div className="form sign_up">
+              <form onSubmit={RegisterSubmit}>
+                {/* heading */}
+                <h1>Create An Account</h1>
+                {/* social media icons */}
+                <div className="social-container">
+                  <NavLink to=""><i className="fa-brands fa-google" /></NavLink>
+                </div>
+                <span>use email for registration</span>
+                {/* input fields start */}
+                <input className='required' type="text" placeholder="User Name" name='username' onChange={handleChange} />
+                {errors.usernameError ? <span>This field is Required</span> : <></>}
+                <input className='required' type="email" placeholder="Email" name='email' onChange={handleChange} />
+                {errors.emailError ? <span>This field is Required</span> : <></>}
+                <input className='required' type="password" placeholder="Password" name='password' onChange={handleChange} />
+                {errors.passwordError ? <span>This field is Required</span> : <></>}
+                <button>Create Account</button>
+                {/* input fields end */}
+              </form>
+            </div>
+            {/* sign Up form section end*/}
+            {/* sign in form section start*/}
+            <div className="form sign_in">
+              <form onSubmit={LoginSubmit}>
+                {/* heading */}
+                <h1>Login In</h1>
+                {/* social media icons */}
+                <div className="social-container">
+                  <NavLink to=""><i className="fa-brands fa-google" /></NavLink>
+                </div>
+                <span>Login In with your Account</span>
+                {/* input fields start */}
+                <input type="email" placeholder="Email" name='email' onChange={handleChange} />
+                <input type="password" placeholder="Password" name='password' onChange={handleChange} />
+                <span>Forgot your <span className="forgot">password?</span></span>
+                <button type='submit' >Login</button>
+                {/* input fields end */}
+
+              </form>
+            </div>
+            {/* sign in form section end*/}
+            {/* overlay section start*/}
+            <div className="overlay-container">
+              <div className="overlay">
+                <div className="overlay-pannel overlay-left">
+                  <h1>Already have an account</h1>
+                  <p>Please Login</p>
+                  <button id="signIn" className="overBtn" onClick={SetLeftPanel} >SignIn</button>
+                </div>
+                <div className="overlay-pannel overlay-right">
+                  <h1>Create Account</h1>
+                  <p>Start Your Journey with Us</p>
+                  <button id="signUp" className="overBtn" onClick={SetRightPanel}>Sign Up</button>
+                </div>
               </div>
             </div>
+            {/* overlay section start*/}
           </div>
-          {/* overlay section start*/}
-        </div>
-
+        }
       </Wrapper>
     </>
   )
@@ -142,7 +170,6 @@ const LoginRegisterPage = () => {
 
 const Wrapper = styled.div`
   @import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,500;0,600;1,600;1,700&display=swap");
-
   display: grid;
   place-items: center;
   font-family: "Nunito", sans-serif;

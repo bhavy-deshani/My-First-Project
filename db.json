@@ -8,14 +8,6 @@
     {
       "": "/lshfsdaj",
       "id": 2
-    },
-    {
-      "": "bhavap@gmail.com",
-      "id": 3
-    },
-    {
-      "": "bhavap@gmail.com",
-      "id": 4
     }
   ],
   "comments": [
@@ -28,28 +20,33 @@
   "profile": {
     "name": "typicode"
   },
-  "user": [
+  "users": [
     {
       "role": 1,
       "username": "admin",
       "email": "admin@mail.com",
-      "password": "admin@123",
+      "password": "123",
       "id": 1
     },
     {
-      "": "hkla",
+      "role": 2,
+      "username": "bhavya",
+      "email": "bhavya@gmail.com",
+      "password": "123",
       "id": 2
     },
     {
-      "": "hkla",
-      "user name": "bhaay",
-      "password": "123456",
+      "role": 2,
+      "username": "bhavy",
+      "email": "bhava@gmail.com",
+      "password": "1234",
       "id": 3
     },
     {
-      "username": "bhavya",
-      "email": "jkfgdsk@hash.com",
-      "password": "12345567",
+      "role": 2,
+      "username": "bhavy",
+      "email": "bhava@gmail.com",
+      "password": "1234",
       "id": 4
     }
   ]

@@ -3,11 +3,14 @@ import Header from "./components/Header";
 import About from "./page/About";
 import Contact from "./page/Contact";
 import Home from "./page/Home";
+import AdminRoute  from "./Admin/AdminRoute";
 import LoginRegister from "./page/LoginRegister";
 import {createBrowserRouter} from "react-router-dom"
+import Logout from "./page/Logout";
 
 
-const AdminRoute = React.lazy(()=>{ return import('./Admin/AdminRoute') })
+
+// const AdminRoute = React.lazy(()=>{ return import('./Admin/AdminRoute') })
 
 const MAinRouter = createBrowserRouter([
     {
@@ -29,6 +32,10 @@ const MAinRouter = createBrowserRouter([
     {
         path:"/register",
         element:<> <Header/><LoginRegister/></>
+    },
+    {
+        path: "/logout",
+        element: <><Logout /></>,
     },
     {
         path:"admin/*",
