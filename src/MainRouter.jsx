@@ -11,6 +11,7 @@ import Logout from "./page/Logout";
 
 
 // const AdminRoute = React.lazy(()=>{ return import('./Admin/AdminRoute') })
+import { Slider } from '.';
 
 const MAinRouter = createBrowserRouter([
     {

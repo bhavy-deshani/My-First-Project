@@ -18,6 +18,7 @@ import {
 } from 'mdb-react-ui-kit';
 import { NavLink,useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
+import Slider from '../page/Slider';
 
 const Header = () => {
 
